@@ -82,7 +82,7 @@ jobs:
 
       - name: Post Chromatic Link in PR Comment
         if: github.event_name == 'pull_request' && steps.chromatic.outputs.url && github.event.pull_request.head.repo.full_name == github.repository
-        uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2
+        uses: mshick/add-pr-comment@64b8e914979889d746c99dea15a76e77ef64580a # v3
         with:
           message: |
             ## 🎨 Visual Testing with Chromatic
