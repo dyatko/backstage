@@ -1,5 +1,13 @@
 # @backstage/plugin-notifications
 
+## 0.5.17-next.1
+
+### Patch Changes
+
+- 03311e3: The notification description used in the notifications table is now a swappable component, so that apps can replace its rendering with a custom implementation.
+- Updated dependencies
+  - @backstage/ui@0.15.0-next.1
+
 ## 0.5.17-next.0
 
 ### Patch Changes

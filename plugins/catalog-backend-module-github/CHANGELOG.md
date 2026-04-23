@@ -1,5 +1,11 @@
 # @backstage/plugin-catalog-backend-module-github
 
+## 0.13.2-next.1
+
+### Patch Changes
+
+- e9b78e9: Removed the `uuid` dependency and replaced usage with the built-in `crypto.randomUUID()`.
+
 ## 0.13.2-next.0
 
 ### Patch Changes

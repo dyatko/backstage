@@ -1,5 +1,11 @@
 # @backstage/plugin-catalog-backend-module-ldap
 
+## 0.12.5-next.1
+
+### Patch Changes
+
+- e9b78e9: Removed the `uuid` dependency and replaced usage with the built-in `crypto.randomUUID()`.
+
 ## 0.12.5-next.0
 
 ### Patch Changes

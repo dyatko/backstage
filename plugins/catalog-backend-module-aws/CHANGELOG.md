@@ -1,5 +1,13 @@
 # @backstage/plugin-catalog-backend-module-aws
 
+## 0.4.23-next.1
+
+### Patch Changes
+
+- e9b78e9: Removed the `uuid` dependency and replaced usage with the built-in `crypto.randomUUID()`.
+- Updated dependencies
+  - @backstage/backend-defaults@0.17.1-next.1
+
 ## 0.4.23-next.0
 
 ### Patch Changes
