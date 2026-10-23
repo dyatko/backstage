@@ -26,7 +26,6 @@ import {
 } from '@backstage/plugin-search-react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import { useMemo } from 'react';
 
 import { searchTranslationRef } from '../../translation';
@@ -57,12 +56,7 @@ export const AppPageResults = (props: { onClick?: () => void }) => {
   }
 
   return (
-    <List
-      aria-label={t('appPageResults.title')}
-      subheader={
-        <ListSubheader disableSticky>{t('appPageResults.title')}</ListSubheader>
-      }
-    >
+    <List aria-label={t('appPageResults.title')}>
       {pages.map(page => (
         <ListItem
           key={page.location}

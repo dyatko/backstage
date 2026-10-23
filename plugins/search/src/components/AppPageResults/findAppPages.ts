@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import Fuse from 'fuse.js';
 import {
   AppTreeApi,
   coreExtensionData,
@@ -29,7 +30,7 @@ export type AppPage = {
   icon?: IconElement;
   /** Title of the parent page, set for sub-pages. */
   parentTitle?: string;
-  /** Lowercased values matched against the search term, best first. */
+  /** Values matched against the search term in addition to the title. */
   keywords: string[];
 };
 
@@ -64,7 +65,7 @@ function getAppPages(
       title,
       location,
       icon,
-      keywords: [title, pluginId, location].map(k => k.toLowerCase()),
+      keywords: [pluginId, location],
     };
 
     // Sub-pages are only matched on their own title and path, so that
@@ -81,7 +82,7 @@ function getAppPages(
             location: `${location.replace(/\/$/, '')}/${subPath}`,
             icon,
             parentTitle: title,
-            keywords: [subTitle, subPath].map(k => k.toLowerCase()),
+            keywords: [subPath],
           },
         ];
       },
@@ -92,25 +93,29 @@ function getAppPages(
 }
 
 /**
- * Finds pages and sub-pages installed in the app whose title, plugin ID or
- * path match the search term, best matches first.
+ * Finds pages and sub-pages installed in the app that fuzzy match the search
+ * term on their title, plugin ID or path, best matches first.
  */
 export function findAppPages(options: {
   appTreeApi: AppTreeApi;
   routeResolutionApi: RouteResolutionApi;
   term: string;
 }): AppPage[] {
-  const term = options.term.trim().toLowerCase();
+  const term = options.term.trim();
   if (!term) return [];
 
-  const score = ({ keywords }: AppPage) => {
-    if (keywords.some(k => k === term)) return 3;
-    if (keywords.some(k => k.startsWith(term))) return 2;
-    return 1;
-  };
+  const fuse = new Fuse(
+    getAppPages(options.appTreeApi, options.routeResolutionApi),
+    {
+      keys: [
+        { name: 'title', weight: 2 },
+        { name: 'keywords', weight: 1 },
+      ],
+      threshold: 0.4,
+      // Match anywhere in a field, not just near the start
+      ignoreLocation: true,
+    },
+  );
 
-  return getAppPages(options.appTreeApi, options.routeResolutionApi)
-    .filter(page => page.keywords.some(k => k.includes(term)))
-    .sort((a, b) => score(b) - score(a) || a.title.localeCompare(b.title))
-    .slice(0, MAX_APP_PAGES);
+  return fuse.search(term, { limit: MAX_APP_PAGES }).map(result => result.item);
 }

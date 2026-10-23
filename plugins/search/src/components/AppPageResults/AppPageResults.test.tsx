@@ -125,12 +125,17 @@ describe('findAppPages', () => {
       );
 
     // Disabled pages and routes with parameters are skipped
-    expect(find(' TECH ')).toEqual(['Docs /docs', 'Tech Radar /tech-radar']);
-    // Exact title matches rank first
+    // Title matches rank above plugin ID and path matches
+    expect(find(' TECH ')).toEqual(['Tech Radar /tech-radar', 'Docs /docs']);
     expect(find('docs')).toEqual(['Docs /docs']);
     expect(find('catalog')).toEqual(['Catalog /catalog']);
     expect(find('')).toEqual([]);
     expect(find('nothing-matches')).toEqual([]);
+    // Typos still match
+    expect(find('catlog')).toEqual(['Catalog /catalog']);
+    expect(find('unprocesed')).toEqual([
+      'Unprocessed Entities /devtools/unprocessed-entities',
+    ]);
     // Sub-pages match on their own title and path, not the parent's
     expect(find('unprocessed')).toEqual([
       'Unprocessed Entities /devtools/unprocessed-entities',
