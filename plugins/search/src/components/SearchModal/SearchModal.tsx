@@ -38,6 +38,7 @@ import { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { rootRouteRef } from '../../plugin';
+import { AppPageResults } from '../AppPageResults';
 import { SearchResultSet } from '@backstage/plugin-search-common';
 import { useTranslationRef } from '@backstage/frontend-plugin-api';
 import { searchTranslationRef } from '../../translation';
@@ -89,6 +90,13 @@ export interface SearchModalProps {
    * Optional ability to pass in result item component renderers.
    */
   resultItemComponents?: SearchModalChildrenProps['resultItemComponents'];
+
+  /**
+   * If true, pages installed in the app that match the search term are listed
+   * above the search results, without waiting for the search backend. Only
+   * supported in apps using the new frontend system.
+   */
+  includeAppPages?: boolean;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -118,7 +126,8 @@ const useStyles = makeStyles(theme => ({
 export const Modal = ({
   toggleModal,
   resultItemComponents,
-}: SearchModalChildrenProps) => {
+  includeAppPages,
+}: SearchModalChildrenProps & { includeAppPages?: boolean }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { transitions } = useTheme();
@@ -179,6 +188,9 @@ export const Modal = ({
           </Grid>
         </Grid>
         <Divider />
+        {includeAppPages && (
+          <AppPageResults onClick={handleSearchResultClick} />
+        )}
         <SearchResult
           onClick={handleSearchResultClick}
           onKeyDown={handleSearchResultClick}
@@ -207,6 +219,7 @@ export const SearchModal = (props: SearchModalProps) => {
     toggleModal,
     children,
     resultItemComponents,
+    includeAppPages,
   } = props;
 
   const classes = useStyles();
@@ -235,6 +248,7 @@ export const SearchModal = (props: SearchModalProps) => {
             <Modal
               toggleModal={toggleModal}
               resultItemComponents={resultItemComponents}
+              includeAppPages={includeAppPages}
             />
           )}
         </SearchContextProvider>

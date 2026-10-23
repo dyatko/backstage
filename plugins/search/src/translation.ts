@@ -39,5 +39,8 @@ export const searchTranslationRef = createTranslationRef({
     sidebarSearchModal: {
       title: 'Search',
     },
+    appPageResults: {
+      title: 'Pages',
+    },
   },
 });

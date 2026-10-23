@@ -32,7 +32,7 @@ import { searchTranslationRef } from '../../translation';
  */
 export type SidebarSearchModalProps = Pick<
   SearchModalProps,
-  'children' | 'resultItemComponents'
+  'children' | 'resultItemComponents' | 'includeAppPages'
 > & {
   icon?: IconComponent;
 };
@@ -54,6 +54,7 @@ const SidebarSearchModalContent = (props: SidebarSearchModalProps) => {
         {...state}
         toggleModal={toggleModal}
         resultItemComponents={props.resultItemComponents}
+        includeAppPages={props.includeAppPages}
         children={props.children}
       />
     </>

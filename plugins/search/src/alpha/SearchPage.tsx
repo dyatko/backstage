@@ -47,6 +47,7 @@ import {
 } from '@backstage/plugin-search-react/alpha';
 import { SearchType } from '../components/SearchType';
 import { UrlUpdater } from '../components/SearchPage/SearchPage';
+import { AppPageResults } from '../components/AppPageResults';
 
 const useSearchPageStyles = makeStyles((theme: Theme) => ({
   filter: {
@@ -62,6 +63,7 @@ const useSearchPageStyles = makeStyles((theme: Theme) => ({
 
 export interface SearchPageProps {
   noTrack: boolean;
+  includeAppPages: boolean;
   items: Array<{
     predicate?: SearchResultItemExtensionPredicate;
     component: SearchResultItemExtensionComponent;
@@ -149,6 +151,7 @@ function SearchPageContent(props: SearchPageProps) {
         )}
         <Grid item xs>
           <SearchPagination />
+          {props.includeAppPages && <AppPageResults />}
           <SearchResults>
             {({ results }) => (
               <>

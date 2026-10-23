@@ -114,7 +114,7 @@ export const appModuleNav = createFrontendModule({
             <Sidebar>
               <SidebarLogo />
               <SidebarGroup label="Search" icon={<SearchIcon />} to="/search">
-                <SidebarSearchModal />
+                <SidebarSearchModal includeAppPages />
               </SidebarGroup>
               <SidebarDivider />
               <SidebarGroup label="Menu" icon={<MenuIcon />}>

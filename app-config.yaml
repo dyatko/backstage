@@ -59,6 +59,10 @@ app:
     - entity-card:org/ownership:
         config:
           ownedKinds: ['Component', 'API', 'System']
+    # List pages installed in the app above search results
+    - page:search:
+        config:
+          includeAppPages: true
 
     # Visit tracking records which pages users navigate to and is disabled by default.
     # Enable it to populate the Most Visited and Recently Visited widgets on the Home page.

@@ -52,6 +52,7 @@ export const searchApi = ApiBlueprint.make({
 export const searchPage = PageBlueprint.makeWithOverrides({
   configSchema: {
     noTrack: z.boolean().default(false),
+    includeAppPages: z.boolean().default(false),
   },
   inputs: {
     items: createExtensionInput([SearchResultListItemBlueprint.dataRefs.item]),
@@ -83,6 +84,7 @@ export const searchPage = PageBlueprint.makeWithOverrides({
         return (
           <SearchPage
             noTrack={config.noTrack}
+            includeAppPages={config.includeAppPages}
             items={items}
             resultTypes={resultTypes}
             searchFilters={searchFilters}
