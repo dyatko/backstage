@@ -43,20 +43,33 @@ function createPageNode(options: {
   title?: string;
   path?: string;
   disabled?: boolean;
+  subPages?: Array<{ title: string; path: string }>;
 }) {
   const routeRef = createRouteRef();
-  const data = new Map<string, unknown>([
-    [coreExtensionData.routeRef.id, routeRef],
-    [coreExtensionData.title.id, options.title],
-  ]);
-  return {
-    node: {
-      spec: {
-        disabled: options.disabled ?? false,
-        plugin: { pluginId: options.pluginId, title: options.pluginTitle },
-      },
-      instance: { getData: (ref: { id: string }) => data.get(ref.id) },
+  const createNode = (data: Map<string, unknown>, pages: unknown[] = []) => ({
+    spec: {
+      disabled: options.disabled ?? false,
+      plugin: { pluginId: options.pluginId, title: options.pluginTitle },
     },
+    instance: { getData: (ref: { id: string }) => data.get(ref.id) },
+    edges: { attachments: new Map([['pages', pages]]) },
+  });
+  const subPageNodes = (options.subPages ?? []).map(subPage =>
+    createNode(
+      new Map<string, unknown>([
+        [coreExtensionData.title.id, subPage.title],
+        [coreExtensionData.routePath.id, subPage.path],
+      ]),
+    ),
+  );
+  return {
+    node: createNode(
+      new Map<string, unknown>([
+        [coreExtensionData.routeRef.id, routeRef],
+        [coreExtensionData.title.id, options.title],
+      ]),
+      subPageNodes,
+    ),
     routeRef,
     path: options.path ?? `/${options.pluginId}`,
   };
@@ -68,6 +81,15 @@ const pages = [
   createPageNode({ pluginId: 'techdocs', title: 'Docs', path: '/docs' }),
   createPageNode({ pluginId: 'entity', path: '/catalog/:kind/:name' }),
   createPageNode({ pluginId: 'hidden-tech', disabled: true }),
+  createPageNode({
+    pluginId: 'devtools',
+    title: 'DevTools',
+    subPages: [
+      { title: 'Info', path: 'info' },
+      { title: 'Unprocessed Entities', path: 'unprocessed-entities' },
+      { title: 'Entity', path: ':name' },
+    ],
+  }),
 ];
 
 const appTreeApi = {
@@ -109,6 +131,15 @@ describe('findAppPages', () => {
     expect(find('catalog')).toEqual(['Catalog /catalog']);
     expect(find('')).toEqual([]);
     expect(find('nothing-matches')).toEqual([]);
+    // Sub-pages match on their own title and path, not the parent's
+    expect(find('unprocessed')).toEqual([
+      'Unprocessed Entities /devtools/unprocessed-entities',
+    ]);
+    expect(find('devtools')).toEqual(['DevTools /devtools']);
+    expect(
+      findAppPages({ appTreeApi, routeResolutionApi, term: 'info' })[0]
+        .parentTitle,
+    ).toBe('DevTools');
   });
 });
 

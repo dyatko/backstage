@@ -72,7 +72,11 @@ export const AppPageResults = (props: { onClick?: () => void }) => {
         >
           <DefaultResultListItem
             icon={page.icon}
-            result={{ title: page.title, text: '', location: page.location }}
+            result={{
+              title: page.title,
+              text: page.parentTitle ?? '',
+              location: page.location,
+            }}
           />
         </ListItem>
       ))}
