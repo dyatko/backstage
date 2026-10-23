@@ -27,7 +27,7 @@ const MAX_APP_PAGES = 5;
 export type AppPage = {
   title: string;
   location: string;
-  icon?: IconElement;
+  icon: IconElement;
   /** Title of the parent page, set for sub-pages. */
   parentTitle?: string;
   /** Values matched against the search term in addition to the title. */
@@ -61,6 +61,9 @@ function getAppPages(
     const title =
       node.instance.getData(coreExtensionData.title) ?? pluginTitle ?? pluginId;
     const icon = node.instance.getData(coreExtensionData.icon) ?? pluginIcon;
+    // Like the app nav, skip pages without an icon. These are usually not
+    // meant to be browsed to, such as sign-in callbacks.
+    if (!icon) return [];
     const page: AppPage = {
       title,
       location,
@@ -111,7 +114,8 @@ export function findAppPages(options: {
         { name: 'title', weight: 2 },
         { name: 'keywords', weight: 1 },
       ],
-      threshold: 0.4,
+      // Tolerates small typos without matching unrelated pages
+      threshold: 0.3,
       // Match anywhere in a field, not just near the start
       ignoreLocation: true,
     },

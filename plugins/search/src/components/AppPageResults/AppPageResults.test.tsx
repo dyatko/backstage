@@ -43,13 +43,18 @@ function createPageNode(options: {
   title?: string;
   path?: string;
   disabled?: boolean;
+  withoutIcon?: boolean;
   subPages?: Array<{ title: string; path: string }>;
 }) {
   const routeRef = createRouteRef();
   const createNode = (data: Map<string, unknown>, pages: unknown[] = []) => ({
     spec: {
       disabled: options.disabled ?? false,
-      plugin: { pluginId: options.pluginId, title: options.pluginTitle },
+      plugin: {
+        pluginId: options.pluginId,
+        title: options.pluginTitle,
+        icon: options.withoutIcon ? undefined : <span />,
+      },
     },
     instance: { getData: (ref: { id: string }) => data.get(ref.id) },
     edges: { attachments: new Map([['pages', pages]]) },
@@ -81,6 +86,7 @@ const pages = [
   createPageNode({ pluginId: 'techdocs', title: 'Docs', path: '/docs' }),
   createPageNode({ pluginId: 'entity', path: '/catalog/:kind/:name' }),
   createPageNode({ pluginId: 'hidden-tech', disabled: true }),
+  createPageNode({ pluginId: 'auth', path: '/oauth2', withoutIcon: true }),
   createPageNode({
     pluginId: 'devtools',
     title: 'DevTools',
@@ -124,7 +130,8 @@ describe('findAppPages', () => {
         page => `${page.title} ${page.location}`,
       );
 
-    // Disabled pages and routes with parameters are skipped
+    // Disabled pages, pages without icons and routes with parameters are skipped
+    expect(find('auth')).toEqual([]);
     // Title matches rank above plugin ID and path matches
     expect(find(' TECH ')).toEqual(['Tech Radar /tech-radar', 'Docs /docs']);
     expect(find('docs')).toEqual(['Docs /docs']);

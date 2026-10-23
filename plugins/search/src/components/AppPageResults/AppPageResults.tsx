@@ -24,6 +24,7 @@ import {
   DefaultResultListItem,
   useSearch,
 } from '@backstage/plugin-search-react';
+import Box from '@material-ui/core/Box';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { useMemo } from 'react';
@@ -58,14 +59,15 @@ export const AppPageResults = (props: { onClick?: () => void }) => {
   return (
     <List aria-label={t('appPageResults.title')}>
       {pages.map(page => (
-        <ListItem
-          key={page.location}
-          alignItems="flex-start"
-          divider
-          onClick={props.onClick}
-        >
+        <ListItem key={page.location} divider onClick={props.onClick}>
           <DefaultResultListItem
-            icon={page.icon}
+            icon={
+              // Page icons come in different sizes, so give them all the
+              // default icon size
+              <Box display="flex" fontSize={24}>
+                {page.icon}
+              </Box>
+            }
             result={{
               title: page.title,
               text: page.parentTitle ?? '',
