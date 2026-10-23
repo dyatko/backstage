@@ -40,6 +40,7 @@ export interface SearchModalChildrenProps {
 export interface SearchModalProps {
   children?: (props: SearchModalChildrenProps) => JSX.Element;
   hidden?: boolean;
+  includeAppPages?: boolean;
   open?: boolean;
   resultItemComponents?: SearchModalChildrenProps['resultItemComponents'];
   toggleModal: () => void;
@@ -90,6 +91,7 @@ export const searchTranslationRef: TranslationRef<
     readonly 'searchType.accordion.numberOfResults': '{{number}} results';
     readonly 'searchType.accordion.allTitle': 'All';
     readonly 'sidebarSearchModal.title': 'Search';
+    readonly 'appPageResults.title': 'Pages';
   }
 >;
 
@@ -140,7 +142,7 @@ export const SidebarSearchModal: (
 // @public
 export type SidebarSearchModalProps = Pick<
   SearchModalProps,
-  'children' | 'resultItemComponents'
+  'children' | 'resultItemComponents' | 'includeAppPages'
 > & {
   icon?: IconComponent;
 };

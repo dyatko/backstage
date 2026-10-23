@@ -57,11 +57,13 @@ const _default: OverridableFrontendPlugin<
     'page:search': OverridableExtensionDefinition<{
       config: {
         noTrack: boolean;
+        includeAppPages: boolean;
         path: string | undefined;
         title: string | undefined;
       };
       configInput: {
         noTrack?: boolean | undefined;
+        includeAppPages?: boolean | undefined;
         path?: string | undefined;
         title?: string | undefined;
       };
@@ -203,11 +205,13 @@ export const searchApi: OverridableExtensionDefinition<{
 export const searchPage: OverridableExtensionDefinition<{
   config: {
     noTrack: boolean;
+    includeAppPages: boolean;
     path: string | undefined;
     title: string | undefined;
   };
   configInput: {
     noTrack?: boolean | undefined;
+    includeAppPages?: boolean | undefined;
     path?: string | undefined;
     title?: string | undefined;
   };
@@ -336,6 +340,7 @@ export const searchTranslationRef: TranslationRef<
     readonly 'searchType.accordion.numberOfResults': '{{number}} results';
     readonly 'searchType.accordion.allTitle': 'All';
     readonly 'sidebarSearchModal.title': 'Search';
+    readonly 'appPageResults.title': 'Pages';
   }
 >;
 
